@@ -1,0 +1,58 @@
+---
+title: "Homework 3, P8130"
+author: "Emil Hafeez (eh2928)"
+date: "10/15/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results 'hide', warning = FALSE}
+library(tidyverse)
+
+exercise_df =
+  read_csv(
+      "./data/exercise.csv")
+```
+
+# Problem 1
+
+For each question, make sure to state the formulae for hypotheses, test-statistics, decision rules/p-values, and provide interpretations in the context of the problem. Use a type I error of 0.05 for all tests.
+
+### Problem 1.a
+
+Perform appropriate tests to assess if the Systolic BP at 6 months is significantly different from the baseline values for the intervention group.
+
+********Check for normality, consider a bonferroni adjustment, state that it's a a paired two-tailed test using an estimate. Then provide the formulas for the test statistic needed, critical value needed, the value, and then get these. and then interpret in context.********
+
+In order to determine an appropriate test, we first check for normality using visual inspection of the plot, using raw data to determine $p$ and $1-p$. from a simple heuristic of $np(n-p) \geq 5$. In this case, n = 36, p = 0.05, q = 0.95, and so 
+
+
+#### Problem 1.a.i
+
+
+#### Problem 1.a.ii
+
+
+
+
+
+#### Problem 1.b
+
+
+
+
+### Problem 1.c
+
+#### Problem 1.c.i
+
+
+#### Problem 1.c.ii
+
+
+
+
+
+
