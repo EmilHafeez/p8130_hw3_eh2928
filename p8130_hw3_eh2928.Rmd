@@ -40,7 +40,7 @@ We first consider the changes in the intervention group between Baseline and End
 
 The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
 
-The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estimated standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estimated standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. Additionally, the standard deviation for the difference between Baseline and Endline is given and thus the variance is known. 
 
 Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sqrt{36}}$ = $t=\frac{-8.58}{17.17/ \sqrt{36}}$ $\approx -2.99825$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we find evidence to reject the null hypothesis and conclude that in the intervention group, the mean systolic blood pressure at Endline is significantly different than the mean systolic blood pressure at Baseline. 
 
@@ -53,7 +53,7 @@ We determine, given that these are the same patients with data collected at two 
 
 The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
 
-The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction, Tukey's or others, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estimated standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction, Tukey's or others, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. Additionally, the standard deviation for the difference between Baseline and Endline is given and thus the variance is known.  
 
 Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-3.33 -0}{14.81/ \sqrt{36}}$  $\approx - 1.3491$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we fail to reject the null hypothesis and conclude that in the Control group, the mean systolic blood pressure at Endline is not significantly different than the mean systolic blood pressure at Baseline. 
 
@@ -70,23 +70,32 @@ So, we can proceed with the independent two sampled t-test assuming equal varian
 
 Given the null hypothesis $H_0$: $\mu_{control} = \mu_{intervention}$ and the alternate, $H_A$: $\mu_{control} \neq \mu_{intervention}$, we use t = $\frac{\overline X_1 - \overline X_2}{s \sqrt {\frac {1}{n_1} + \frac{1}{n_2}}}$ $\sim$ $t_{n_1+n_2-2}$ under $H_0$
 
-Computing this, we have t = $\frac{-3.33 - (-8.58)}{s \sqrt {\frac {1}{36} + \frac{1}{36}}}$ = $\frac{5.25}{s \sqrt{0.055}}$ = 1.3892. 
+Computing this, we have t = $\frac{-3.33 - (-8.58)}{s \sqrt {\frac {1}{36} + \frac{1}{36}}}$ = $\frac{5.25}{s \sqrt{0.055}}$ = 1.3892. We can also use std_pooled<-sqrt(((14.81^2(35))+(17.17^2(35)))/70) and `t_stats<-(-3.33-(-8.58))/(std_pooled*sqrt((1/36)+(1/36)))`. The critical value is given by $t_{n_1+n_2-2, 0.975}$ = `qt(0.975,70)` = 1.994437. Therefore, we fail to reject the null hypothesis and conclude that the difference in mean systolic blood pressure change from Baseline to Endline in the Control group is not significantly different from the mean systolic blood pressure change from Baseline to Endline in the Intervention group. 
 
-We can also use `std_pooled<-sqrt(((14.81^2*35)+(17.17^2*35))/70)` and `t_stats<-(-3.33-(-8.58))/(std_pooled*sqrt((1/36)+(1/36)))`.
+For the confidence interval,
 
-The critical value is given by $t_{n_1+n_2-2, 0.975}$ = `qt(0.975,70)` = 1.994437.
+\begin{equation}
+\left(\overline{X_{1}}-\overline{X_{2}}-t_{n_{1}+n_{2}-2,1-\alpha / 2} \cdot s \cdot \sqrt{1 / n_{1}+1 / n_{2}}, \overline{X_{1}}-\overline{X_{2}}+t_{n_{1}+n_{2}-2,1-\alpha / 2} \cdot s \cdot \sqrt{1 / n_{1}+1 / n_{2}}\right)
+\end{equation}
 
-CONFIDENCE INTERVAL TOO
+
+This is to say, the lower limit of the 95% CI is 5.25 - \(t_{n_1+n_2-2, 1 - \alpha}\) * \(s \sqrt {\frac {1}{36} + \frac{1}{36}}\) = = $5.25 - 22.27386 = -17.02386$ and the upper limit of the confidence interval is (-3.33 - (-8.58)) \(+ t_{n_{1}+n_{2}-2,1-\alpha} * s \sqrt {\frac {1}{36} + \frac{1}{36}}\) =  $5.25 + 22.27386 = 27.52386$, thus the 95% CI is (-17.02386, 27.52386). 
+
 
 ### Problem 1.c
 
 #### Problem 1.c.i
 
+The main assumptions for part a) the two-sided paired t-test, are that we assume the systolic blood pressure measurements are normally distributed with mean $\mu_{baseline}$ $\mu_{endline}$, and that these differences also follow a normal distribution. We therefore also assume that the observed SBP differences constitute a random sample from this normally distributed population of differences. We're assuming the sampled patients have been drawn randomly, and also that each of their sampling is independent from another. We also assume that the variance is known (based on the provided standard deviation; I am also assuming this provided standard deviation was adjusted for the paired t-test (it's already been divided by the square root of (n-1)). 
+
+The main assumptions for part b) the two-sided two-sample independent t-test assumes similarly as part a) regarding independence and normality, and then regarding variance instead assume the homogeneity of variance (which we tested with an F-test). 
+
+Now, we can examine the normality assumption using graphical displays, for the Intervention group systolic blood pressures at Baseline and at Endline, and  similarly for the Control group. 
 ```{r}
 #plot of intervention at baseline to examine normality
 exercise_df %>%
   ggplot(aes(x = Systolic_PRE)) +
-  geom_histogram(binwidth = 8, fill = "black", colour = "black", alpha = 0.9) +
+  geom_histogram(binwidth = 8, fill = "grey", colour = "grey", alpha = 0.8) +
   labs(
     x = "Systolic Blood Pressure at Baseline",
     y = "Density",
@@ -98,7 +107,7 @@ exercise_df %>%
 #plot of intervention at endline to examine normality
 exercise_df %>%
   ggplot(aes(x = Systolic_POST)) +
-  geom_histogram(binwidth = 8, fill = "black", colour = "black", alpha = 0.9) +
+  geom_histogram(binwidth = 8, fill = "grey", colour = "grey", alpha = 0.8) +
   labs(
     x = "Systolic Blood Pressure at Baseline",
     y = "Density",
