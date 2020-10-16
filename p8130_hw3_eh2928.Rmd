@@ -64,7 +64,11 @@ Now, we assess the systolic blood pressure absolutely changes between the two gr
 
 The statistic is given by F= $\frac{s_1^2}{s_s^2}$ , where the null hypothesis is $\sigma_1^2 = \sigma^2_2$, and the alternate hypothesis is $\sigma_1^2 \neq \sigma^2_2$ . In our case, we use F= $\frac{14.81^2}{17.17^2}$  = 0.74399 and the critical value is `qf(0.975, 35, 35)`= 1.961, such that we fail to reject the null hypothesis and conclude that the variance of sample 1 is not significantly different from the variance of sample 2. 
 
-So, we can proceed with the independent two sampled t-test assuming equal variances. We use the pooled estimate of the variance (and associated standard deviation) from two independent samples given by: $s^{2}=\frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}}{\left(n_{1}+n_{2}-2\right)}$ = $s^{2}$ = $\frac{(35) s_{1}^{2}+(35) s_{2}^{2}}{68}$ = $\frac{(35)(14.81^2)+(35)(17.17^2)}{68}$ = 264.6334559.
+We use the pooled estimate of the variance (and associated standard deviation) from two independent samples given by: $s^{2}=\frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}}{\left(n_{1}+n_{2}-2\right)}$ = $s^{2}$ = $\frac{(35) s_{1}^{2}+(35) s_{2}^{2}}{68}$ = $\frac{(35)(14.81^2)+(35)(17.17^2)}{68}$ = 264.6334559.
+
+So, we can proceed with the independent two sampled t-test assuming equal variances. 
+
+Given the null hypothesis $H_0$: $\mu_{control} = \mu_{intervention}$ and the alternate, $H_A$: $\mu_{control} \neq \mu_{intervention}$, we use t = $\frac{\overline X_1 - \overline X_2}{\sqrt {\frac {s^2_1}{n_1} + \frac{s^2_2}{n_2}}}$ . 
 
 
 ### Problem 1.c
