@@ -27,16 +27,35 @@ Perform appropriate tests to assess if the Systolic BP at 6 months is significan
 
 ********Check for normality, consider a bonferroni adjustment, state that it's a a paired two-tailed test using an estimate. Then provide the formulas for the test statistic needed, critical value needed, the value, and then get these. and then interpret in context.********
 
-In order to determine an appropriate test, we first check for normality using visual inspection of the plot, using raw data to determine $p$ and $1-p$. from a simple heuristic of $np(n-p) \geq 5$. In this case, n = 36, p = 0.05, q = 0.95, and so 
+
+H0, HA, mu1, mu2, test statistic formula, critical value needed, interpret
+
 
 
 #### Problem 1.a.i
 
+In order to determine an appropriate test, we check for normality using visual inspection of the plot of systolic blood pressure in the Intervention group at both baseline and endline, using raw data. This is explored in Problem 1.c.i and utilizes mean $\mu_{pre}$ and $\mu_{post}$ respectively. 
+
+We first consider the changes in the intervention group between Baseline and Endline first. We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test. 
+
+The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
+
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+
+Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sqrt{36}}$ = $t=\frac{-8.58}{17.17/ \sqrt{36}}$ $\approx -2.99825$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we find evidence to reject the null hypothesis and conclude that in the intervention group, the mean systolic blood pressure at Endline is significantly different than the mean systolic blood pressure at Baseline. 
+
 
 #### Problem 1.a.ii
 
+Similarly, in order to determine an appropriate test, we check for normality using visual inspection of the plot of systolic blood pressure in the Control group at both Baseline and Endline, using raw data. This is explored in Problem 1.c.i and utilizes mean $\mu_{pre}$ and $\mu_{post}$ respectively. 
 
+We first consider the changes in the intervention group between Baseline and Endline first. We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test. 
 
+The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
+
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+
+Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sqrt{36}}$ = $t=\frac{-8.58}{17.17/ \sqrt{36}}$ $\approx -2.99825$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we find evidence to reject the null hypothesis and conclude that in the intervention group, the mean systolic blood pressure at Endline is significantly different than the mean systolic blood pressure at Baseline. 
 
 
 #### Problem 1.b
@@ -48,7 +67,32 @@ In order to determine an appropriate test, we first check for normality using vi
 
 #### Problem 1.c.i
 
+```{r}
+#plot of intervention at baseline to examine normality
+exercise_df %>%
+  ggplot(aes(x = Systolic_PRE)) +
+  geom_histogram(binwidth = 8, fill = "black", colour = "black", alpha = 0.9) +
+  labs(
+    x = "Systolic Blood Pressure at Baseline",
+    y = "Density",
+    title = "Histogram and Density Curve for the Original Normal Data") +
+  scale_fill_viridis_d("") +
+  theme(legend.position = "none")
+```
+```{r}
+#plot of intervention at endline to examine normality
+exercise_df %>%
+  ggplot(aes(x = Systolic_POST)) +
+  geom_histogram(binwidth = 8, fill = "black", colour = "black", alpha = 0.9) +
+  labs(
+    x = "Systolic Blood Pressure at Baseline",
+    y = "Density",
+    title = "Histogram and Density Curve for the Original Normal Data") +
+  scale_fill_viridis_d("") +
+  theme(legend.position = "none")
+```
 
+DISCUSS
 #### Problem 1.c.ii
 
 
