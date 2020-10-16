@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r results 'hide', warning = FALSE}
+```{r results = 'hide', warning = FALSE}
 library(tidyverse)
 
 exercise_df =
@@ -40,7 +40,7 @@ We first consider the changes in the intervention group between Baseline and End
 
 The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
 
-The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estimated standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
 
 Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sqrt{36}}$ = $t=\frac{-8.58}{17.17/ \sqrt{36}}$ $\approx -2.99825$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we find evidence to reject the null hypothesis and conclude that in the intervention group, the mean systolic blood pressure at Endline is significantly different than the mean systolic blood pressure at Baseline. 
 
@@ -49,18 +49,27 @@ Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sq
 
 Similarly, in order to determine an appropriate test, we check for normality using visual inspection of the plot of systolic blood pressure in the Control group at both Baseline and Endline, using raw data. This is explored in Problem 1.c.i and utilizes mean $\mu_{pre}$ and $\mu_{post}$ respectively. 
 
-We first consider the changes in the intervention group between Baseline and Endline first. We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test. 
+We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test. 
 
 The $H_0$ is that $\mu_{pre} -\mu_{post} = 0$ or $\Delta = 0$. The $H_A$ is $\mu_{pre} -\mu_{post} \neq 0$ or $\Delta \neq 0$.
 
-The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction or Tukey's, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
+The test statistic is $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ where $\overline d$ is the point estimate of the mean difference, $s_{d} / \sqrt{n}$ is the estiamted standard error of the differences, and we use the critical value of $t_{n-1,1-{\alpha/2}}$. We could use a Bonferroni correction, Tukey's or others, considering that we will be implementing multiple significance tests, but we say it is not necessary for the case of this homework problem. 
 
-Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sqrt{36}}$ = $t=\frac{-8.58}{17.17/ \sqrt{36}}$ $\approx -2.99825$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we find evidence to reject the null hypothesis and conclude that in the intervention group, the mean systolic blood pressure at Endline is significantly different than the mean systolic blood pressure at Baseline. 
+Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-3.33 -0}{14.81/ \sqrt{36}}$  $\approx - 1.3491$. The critical value is given the the percentile of the t distribution with (n-1) degrees of freedom, `qt(0.975,35)` $\approx$  $2.03$, such that we fail to reject the null hypothesis and conclude that in the Control group, the mean systolic blood pressure at Endline is not significantly different than the mean systolic blood pressure at Baseline. 
 
 
 #### Problem 1.b
 
+Now, we assess the systolic blood pressure absolutely changes between the two groups using an independent, two-sampled t-test. We assume independence based on the given information on the sampling mechanism. Since we do not know the two population variances, we first check for equality of variances. 
 
+The statistic is given by $F=\frac{s_{1}^{2}}{s_{2}^{2}} \sim F_{n_{1}-1, n_{2}-1}$, where the null hypothesis is that $\sigma^2_1 = \sigma^2_2$ and the alternate hypothesis is $\sigma^2_1\neq \sigma^2_2$. 
+
+We reject the null hypothesis when $F > F_{n_{1}-1, n_{2} - 1,1 - \alpha / 2}} $ or $ F<F_{n_{1}-1, n_{2}-1, a / 2}$ and fail to reject the null when 
+$F_{n_{1}-1, n_{2}-1, \alpha / 2} \leq F \leq F_{n_{1}-1, n_{2}-1,1-\alpha / 2}$. 
+
+In our case, we use $F = \frac{14.81^2}{17.17^2} = 0.74399$ and the critical value is `qf(0.975, 35, 35)` = $1.961$, such that we fail to reject the null hypothesis and conclude that the variance of sample 1 is not significantly different from the variance of sample 2. 
+
+So, we can proceed with the independent two sampled t-test assuming equal variances. We use the pooled estimate of the variance (and associated standard deviation) from two independent samples given by: $s^{2}=\frac{\left(n_{1}-1\right) s_{1}^{2}+\left(n_{2}-1\right) s_{2}^{2}}{\left(n_{1}+n_{2}-2\right)}$ = $s^{2}=\frac{(35) s_{1}^{2}+(35) s_{2}^{2}}{68}$ = $s_^{2}=\frac{(35)(14.81^2)+(35)(17.17^2)}{68}$ = 264.6334559.
 
 
 ### Problem 1.c
