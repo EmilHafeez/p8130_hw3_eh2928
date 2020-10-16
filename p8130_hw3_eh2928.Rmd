@@ -11,6 +11,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r results = 'hide', warning = FALSE}
 library(tidyverse)
+library("animation")
+
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 
 exercise_df =
   read_csv(
@@ -93,11 +104,11 @@ The main assumptions for part b) the two-sided two-sample independent t-test ass
 Now, we can examine the normality assumption using graphical displays, for the Intervention group systolic blood pressures at Baseline and at Endline, and  similarly for the Control group. 
 ```{r}
 #plot of intervention at baseline to examine normality
-exercise_df %>%
+exercise_df %>% 
   ggplot(aes(x = Systolic_PRE)) +
-  geom_histogram(binwidth = 8, fill = "grey", colour = "grey", alpha = 0.8) +
+  geom_histogram(binwidth = 5, alpha = 0.8) +
   labs(
-    x = "Systolic Blood Pressure at Baseline",
+    x = "Systolic Blood Pressure at Baseline for Control and Intervention Groups Combined",
     y = "Density",
     title = "Histogram and Density Curve for the Original Normal Data") +
   scale_fill_viridis_d("") +
@@ -105,19 +116,101 @@ exercise_df %>%
 ```
 ```{r}
 #plot of intervention at endline to examine normality
-exercise_df %>%
-  ggplot(aes(x = Systolic_POST)) +
-  geom_histogram(binwidth = 8, fill = "grey", colour = "grey", alpha = 0.8) +
+exercise_df %>% 
+  ggplot(aes(x = Systolic_PRE)) +
+  geom_histogram(binwidth = 5, alpha = 0.8) +
   labs(
-    x = "Systolic Blood Pressure at Baseline",
+    x = "Systolic Blood Pressure at Endline for Control and Intervention Groups Combined",
     y = "Density",
     title = "Histogram and Density Curve for the Original Normal Data") +
   scale_fill_viridis_d("") +
   theme(legend.position = "none")
 ```
 
-DISCUSS
+Neither Baseline nor Endline SBP measurements appear to meet the underlying assumption of the normality distribution.  While we could use a wider bin width like 10 rather than 5, which makes the data appear more normal (especially near the center of the distribution), but this has the opposite intended effect and hides the problem.
+
 #### Problem 1.c.ii
+
+Unfortunately, this brings the tests' validity into question, as well as brings doubt to the additional assumption that the underlying distribution of the difference between Baseline and Endline scores is normal. This needs to be remedied. One way would be beginning with the Central Limit Theorem and take a larger sample such that the distribution of the sample means will be approximately normally distributed (which holds true even if the population SBP distribution is not normal). Additionally, we could examine ift here are measurement errors or outliers in the data that may be uncharacteristically skewing the distribution (though this isn't immediately clear as the case). We could additionally attempt transformation of the data (for example, by taking the logarithm or square root), though this may not be effective.
+
+
+# Problem 2
+
+In this exercise you learn how to create your own ‘true’ scenario, simulate corresponding data, and quantify the type I error over many repetitions.
+
+### Problem 2.a
+
+Given scenario is that the average IQ score of Ivy League Colleges is 120 and assume this to be the null hypothesis \(H_0: \mu =\mu_{0} = 120\). The alternate hypothesis is that the true mean is less than 120, \(H_A: \mu < 120\).  
+
+The standard deviation and alpha are given as  \(\sigma = 15\) and \(\alpha = 0.05\). 
+
+$$X_i \stackrel{i.i.d.}{\sim} N(\mu_1, \sigma^2)$$
+
+Firstly, we generate one random sample of size n=20 using `rnorm(20, mean = 120, sd = 15)`. 
+```{r}
+set.seed(4)
+rnorm_20 = rnorm(20, mean = 120, sd = 15)
+mean_rnorm20 = mean(rnorm_20)
+```
+
+We are assuming the normal distribution and compute the test statistic as given by $Z=\frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}$ , such that $Z=\frac{\overline X-120}{15/\sqrt{20}}$ = 0.08414241. The critical value is given by t_{n-1,1-{\alpha}} = `qnorm(0.95,lower.tail = TRUE)` $\approx$  $1.644854$ such that we fail to reject the null hypothesis and conclude that the true mean is not less than 120 units. 
+
+### Problem 2.b
+```{r}
+# Generate 100 random samples of size 10 (with replacement) from the original distribution
+N <- 100
+mu <- 120
+sigma2 <- 225
+sigma = 15
+n.sample <- 100
+n        <- 20
+set.seed(4)
+norm.df <- tibble(
+  sample = rnorm(N, mu, sigma),
+  id     = "Original Normal Distribution"
+)
+#Sample indices
+sample.indices   <- list()
+for (i in 1:n.sample) {
+  sample.indices[[i]] <- sample(1:N, n, replace = TRUE) 
+}
+#Take the mean of each sample and attach to original data frame
+norm.df = bind_rows(norm.df,
+                     tibble(
+                       sample = map_dbl(.x = sample.indices,
+                                        ~mean(norm.df$sample[.x])),
+                       id     = "Sample Means Distribution"
+                     ))
+```
+
+
+
+### Problem 2.c
+
+
+### Problem 2.d
+
+
+
+
+
+#visualization testing
+rnorm_20 <- bind_rows(rnorm_20,
+                     tibble(
+                       sample = map_dbl(.x = rnorm_20,
+                                        ~mean(rnorm_20),
+                       id     = "Sample Means Distribution"
+                     ))
+                      )
+
+rnorm_20 %>%
+  ggplot(aes(x = sample, y = ..density.., fill = id)) +
+  geom_histogram(binwidth = 10, colour = "black", alpha = 0.2) +
+  geom_density(alpha = 0.4, adjust = 1.6) +
+  labs(
+    x = sprintf("Xi ~ N(%i, %i)", mu, sigma2),
+    y = "Density") +
+
 
 
 
