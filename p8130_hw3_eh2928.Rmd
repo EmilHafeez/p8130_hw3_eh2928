@@ -156,39 +156,47 @@ mean_rnorm20 = mean(rnorm_20)
 We are assuming the normal distribution and compute the test statistic as given by \(Z=\frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}\) , such that $$Z=\frac{\overline X-120}{15/\sqrt{20}}$$ = 0.08414241. The critical value is given by $t_{n-1,1-{\alpha}}$ = `qnorm(0.95,lower.tail = TRUE)` $\approx$  $1.644854$ such that we fail to reject the null hypothesis and conclude that the true mean is not less than 120 units. 
 
 ### Problem 2.b
-```{r}
-# Generate 100 random samples of size 10 (with replacement) from the original distribution
-N <- 100
-mu <- 120
-sigma2 <- 225
-sigma = 15
-n.sample <- 100
-n        <- 20
-set.seed(4)
-norm.df <- tibble(
-  sample = rnorm(N, mu, sigma),
-  id     = "Original Normal Distribution"
-)
-#Sample indices
-sample.indices   <- list()
-for (i in 1:n.sample) {
-  sample.indices[[i]] <- sample(1:N, n, replace = TRUE) 
-}
-#Take the mean of each sample and attach to original data frame
-norm.df = bind_rows(norm.df,
-                     tibble(
-                       sample = map_dbl(.x = sample.indices,
-                                        ~mean(norm.df$sample[.x])),
-                       id     = "Sample Means Distribution"
-                     ))
+
+Using qnorm(0.05), we run a simulation of 100 random samples of size n=20 from the underlying null distribution, where for each sample we run a one-sided t-test, and record the result. 
+
+```{r for looping the test and decision}
+sampled = rep(NA, 100)
+decision = rep(NA,100)
+
+for (i in 1:100) {
+  set.seed(i)
+  sampled = rnorm(20, mean = 120, sd = 15)
+  t_stats = (mean(sampled) - 120) / (sd(sampled)/sqrt(20))
+  decision[i] = ifelse(t_stats > qnorm(0.05), 1, 0)
+ }
+mean(decision)
 ```
 
-
-
+There is a 95% rate of 1's and 5% rate of 0's produced by this simulation, suggesting that in 5% of the simulations we fail to reject the null hypothesis because the t_stats value is greater than the qnorm(0.05), which, since we know the true population is 120 IQ points, this is a Type I error rate.
 
 ### Problem 2.c
 
+Similarly, using qnorm(0.05), we run a simulation of 1000 random samples of size n=20 from the underlying null distribution, where for each sample we run a one-sided t-test, and record the result. 
+
+```{r}
+sampled = rep(NA, 1000)
+decision = rep(NA,1000)
+
+for (i in 1:1000) {
+  set.seed(i)
+  sampled = rnorm(20, mean = 120, sd = 15)
+  t_stats = (mean(sampled) - 120) / (sd(sampled)/sqrt(20))
+  decision[i] = ifelse(t_stats > qnorm(0.05), 1, 0)
+ }
+mean(decision)
+```
+
+There is a 94.4% rate of 1's and 5% rate of 0's produced by this simulation, suggesting that in 6.6% of the simulations we fail to reject the null hypothesis because the t_stats value is greater than the qnorm(0.05), which, since we know the true population is 120 IQ points, this is a Type I error rate.
+
 
 ### Problem 2.d
+The type I error rate in part b) was 5% and in part c) was 6.6%. While we would normally anticipate that the type I error rate should be closer and closer to the initially imposed value of 0.05 as the sampling size increases, this is not the result that we observe. 
+
+
 
 
