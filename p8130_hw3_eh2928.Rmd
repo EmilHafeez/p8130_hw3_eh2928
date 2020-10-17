@@ -131,7 +131,7 @@ Neither Baseline nor Endline SBP measurements appear to meet the underlying assu
 
 #### Problem 1.c.ii
 
-Unfortunately, this brings the tests' validity into question, as well as brings doubt to the additional assumption that the underlying distribution of the difference between Baseline and Endline scores is normal. This needs to be remedied. One way would be beginning with the Central Limit Theorem and take a larger sample such that the distribution of the sample means will be approximately normally distributed (which holds true even if the population SBP distribution is not normal). Additionally, we could examine ift here are measurement errors or outliers in the data that may be uncharacteristically skewing the distribution (though this isn't immediately clear as the case). We could additionally attempt transformation of the data (for example, by taking the logarithm or square root), though this may not be effective.
+Unfortunately, this brings the tests' validity into question, as well as brings doubt to the additional assumption that the underlying distribution of the difference between Baseline and Endline scores is normal. This needs to be remedied. One way would be beginning with the Central Limit Theorem and take a larger sample such that the distribution of the sample means will be approximately normally distributed (which holds true even if the population SBP distribution is not normal). Additionally, we could examine ift here are measurement errors or outliers in the data that may be uncharacteristically skewing the distribution (though this isn't immediately clear as the case). We could additionally attempt transformation of the data (for example, by taking the logarithm or square root), though this may not be effective. Finally, an alternative is to use an Exact method, to calculate the confidence interval.
 
 
 # Problem 2
@@ -153,7 +153,7 @@ rnorm_20 = rnorm(20, mean = 120, sd = 15)
 mean_rnorm20 = mean(rnorm_20)
 ```
 
-We are assuming the normal distribution and compute the test statistic as given by $Z=\frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}$ , such that $Z=\frac{\overline X-120}{15/\sqrt{20}}$ = 0.08414241. The critical value is given by t_{n-1,1-{\alpha}} = `qnorm(0.95,lower.tail = TRUE)` $\approx$  $1.644854$ such that we fail to reject the null hypothesis and conclude that the true mean is not less than 120 units. 
+We are assuming the normal distribution and compute the test statistic as given by \(Z=\frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}\) , such that $$Z=\frac{\overline X-120}{15/\sqrt{20}}$$ = 0.08414241. The critical value is given by $t_{n-1,1-{\alpha}}$ = `qnorm(0.95,lower.tail = TRUE)` $\approx$  $1.644854$ such that we fail to reject the null hypothesis and conclude that the true mean is not less than 120 units. 
 
 ### Problem 2.b
 ```{r}
@@ -185,35 +185,10 @@ norm.df = bind_rows(norm.df,
 
 
 
+
 ### Problem 2.c
 
 
 ### Problem 2.d
-
-
-
-
-
-#visualization testing
-rnorm_20 <- bind_rows(rnorm_20,
-                     tibble(
-                       sample = map_dbl(.x = rnorm_20,
-                                        ~mean(rnorm_20),
-                       id     = "Sample Means Distribution"
-                     ))
-                      )
-
-rnorm_20 %>%
-  ggplot(aes(x = sample, y = ..density.., fill = id)) +
-  geom_histogram(binwidth = 10, colour = "black", alpha = 0.2) +
-  geom_density(alpha = 0.4, adjust = 1.6) +
-  labs(
-    x = sprintf("Xi ~ N(%i, %i)", mu, sigma2),
-    y = "Density") +
-
-
-
-
-
 
 
