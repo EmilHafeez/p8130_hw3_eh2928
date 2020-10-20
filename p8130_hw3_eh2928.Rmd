@@ -49,7 +49,7 @@ Using $t=\frac{\overline d-0}{s_{d} / \sqrt{n}}$ = $t=\frac{-8.58 -0}{17.17/ \sq
 
 #### Problem 1.a.ii
 
-Similarly, we consider the changes in systolic blood pressure in the Control group between Baseline and Endline first. We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test.  Generally, in order to determine an appropriate test, we check for normality using visual inspection of the plot of systolic blood pressure changes in the Intervention group between Pre and Post using raw data; this is revisited and explored in Problem 1.c.i. 
+Similarly, we consider the changes in systolic blood pressure in the Control group between Baseline and Endline. We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test.  Generally, in order to determine an appropriate test, we check for normality using visual inspection of the plot of systolic blood pressure changes in the Intervention group between Pre and Post using raw data; this is revisited and explored in Problem 1.c.i. 
 
 We determine, given that these are the same patients with data collected at two different timepoints and we do not have reason to test a specific directionality, to use a two-sided Paired t-test. 
 
@@ -88,11 +88,11 @@ This is to say, the lower limit of the 95% CI is 5.25 - \(t_{n_1+n_2-2, 1 - \alp
 
 #### Problem 1.c.i
 
-The main assumptions for part a) the two-sided paired t-test, are that we assume the systolic blood pressure measurements are normally distributed with mean $\mu_{baseline}$ $\mu_{endline}$, and that these differences also follow a normal distribution. We therefore also assume that the observed SBP differences constitute a random sample from this normally distributed population of differences. We're assuming the sampled patients have been drawn randomly, and also that each of their sampling is independent from another. We also assume that the variance is known.
+The main assumptions for part 1.a.i and 1.a.ii, the two-sided paired t-tests, are that we assume the systolic blood pressure measurements are normally distributed with mean $\mu_{baseline}$ $\mu_{endline}$, and that these differences also follow a normal distribution. We therefore also assume that the observed SBP differences constitute a random sample from this normally distributed population of differences. We're assuming the sampled patients have been drawn randomly, and also that each of their sampling is independent from another. We also assume that the variance is known.
 
 First, for the Paired two-sided t-test: we examine the distribution of blood pressure differences between baseline and endline (post-pre) within the treatment and control groups (separately).
 
-We can see that, for the Paired test of SBP change in the control group,  it appears the distribution of SBP differences in the Control group appear approximately normally distributed, though not well-centered on zero. The intervention group does not appear to be normally distributed. 
+We can see that, for Problem 1.a.i and for Problem 1.a.ii, the Paired test of SBP change in the Intervention and then in the Control group: it appears the distribution of SBP differences in the Control group appear approximately normally distributed (though not well-centered on zero). The intervention group does not appear to be normally distributed. 
 
 ```{r}
 #plot of group data differences to examine normality
@@ -108,13 +108,13 @@ exercise_df %>%
   theme(legend.position = "none")
 ```
 
-For the two-sample independent two-sided t-test, the main assumptions for part b)  assumes similarly as part a) regarding independence and normality, and then regarding variance instead assumes the homogeneity of variance (which we tested with an F-test). For this test, we examine that the SBP is approximately normally distributed within each group and timepoint, and we examine the distributions of Post-Pre score differences within each group.
+For Problem 1.b, the two-sample independent two-sided t-test, the main assumptions include assumes similarly as part 1.a regarding independence and normality, and additionally regarding variance assumes the homogeneity of variance (which we examined with an F-test). For this 1.b two-sample independent two-sided t-test, we assume that the differences between SBP at Baseline and Endline in the control group and in the intervention group are normally distributed, as based on an underlying normal distribution of SBP measurements within each timepoint and group. We here examine that the SBP is approximately normally distributed within each group and timepoint, and we examine the distributions of Post-Pre score differences within each group. In doing so, we can see that the Baseline and Endline SBP measurements in the Control group do not appear normally distributed (particularly at Endline), nor does the Baseline SBP in the Intervention group. Relatedly, the changes between Post and Pre SBP in the Control group and more so particularly in the Intervention group do not appear approximately normally distributed.
 
 ```{r}
 #plot of group data differences to examine normality
 exercise_df %>% 
   ggplot(aes(x = Systolic_PRE)) +
-  geom_histogram(binwidth = 8, alpha = 0.8) +
+  geom_histogram(binwidth = 10, alpha = 0.8) +
   facet_grid(. ~ Group) +
   labs(
     x = "Systolic Blood Pressure Measurements for Control and Intervention Groups",
@@ -125,7 +125,7 @@ exercise_df %>%
 
 exercise_df %>% 
   ggplot(aes(x = Systolic_POST)) +
-  geom_histogram(binwidth = 8, alpha = 0.8) +
+  geom_histogram(binwidth = 10, alpha = 0.8) +
   facet_grid(. ~ Group) +
   labs(
     x = "Systolic Blood Pressure Measurements for Control and Intervention Groups",
@@ -136,7 +136,7 @@ exercise_df %>%
 
 exercise_df %>% 
   ggplot(aes(x = Systolic_POST - Systolic_PRE)) +
-  geom_histogram(binwidth = 8, alpha = 0.8) +
+  geom_histogram(binwidth = 10, alpha = 0.8) +
   facet_grid(. ~ Group) +
   labs(
     x = "Systolic Blood Pressure Differences for Control and Intervention Groups",
@@ -150,7 +150,7 @@ exercise_df %>%
 
 Unfortunately, since normality of the SBP and its differences between Post and Pre measurements is questionable, as well as brings doubt to the additional assumption that the underlying distribution of the difference between Baseline and Endline scores is normal,  this brings the tests' validity into question. This needs to be remedied. 
 
-One way would be beginning with the Central Limit Theorem's recommendation and conduct the experiment over with a larger sample such that the distribution of the sample means may be more approximately normally distributed (which holds true even if the population SBP distribution is not normal). While 36 measurements per group is not small, it was not sufficient. Additionally, we could examine if there are measurement errors or outliers in the data that may be uncharacteristically skewing the distribution (though this doesn't seem to be the case). We could additionally attempt transformation of the data (for example, by taking the logarithm or square root), though this may not be effective. Finally, I would suggest the alternative is to use an Exact method rather than assume normality, and calculate the confidence interval.
+One way would be beginning with the Central Limit Theorem's recommendation and conduct the experiment over with a larger sample such that the distribution of the sample means may be more approximately normally distributed (which holds true even if the population SBP distribution is not normal). While 36 measurements per group is not small, it was not sufficient. Additionally, we could examine if there are measurement errors or outliers in the data that may be uncharacteristically skewing the distribution (though this doesn't seem to be the case). We could additionally attempt transformation of the data (for example, by taking the logarithm or square root), though this may not be effective. Finally, I would actually suggest to instead use an Exact method rather than assume normality, and calculate the confidence interval directly.
 
 # Problem 2
 
@@ -160,7 +160,7 @@ In this exercise you learn how to create your own ‘true’ scenario, simulate 
 
 Given scenario is that the average IQ score of Ivy League Colleges is 120 and assume this to be the null hypothesis \(H_0: \mu =\mu_{0} = 120\). The alternate hypothesis is that the true mean is less than 120, \(H_A: \mu < 120\).  
 
-The true standard deviation of the population and alpha are given as  \(\sigma = 15\) and \(\alpha = 0.05\) and so we implement a one-sided one-sample z-test with known population variance, and using the critical values from the normal distribution.  We approach this similarly for the following sections.
+The standard deviation and alpha are given as  \(\sigma = 15\) and \(\alpha = 0.05\). 
 
 $$X_i \stackrel{i.i.d.}{\sim} N(\mu_1, \sigma^2)$$
 
